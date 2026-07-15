@@ -25,16 +25,31 @@ a table anyone on the team can check.
 3. **Claude Code installed** (or a similar chat-based coding agent), if you
    want the "just ask in chat" experience. Not required — you can run every
    script by hand instead.
-4. **Fifteen minutes**, mostly spent waiting on copy-pasting IDs.
+4. **GitHub CLI (`gh`) installed and logged in.** Not required to run this
+   guide, but it means you never have to type a `git` command yourself —
+   install it once from [cli.github.com](https://cli.github.com), log in
+   with `gh auth login`, and from then on you can just ask your agent
+   "clone this repo" or "check for updates" in plain English and it handles
+   the rest, no separate authentication setup.
+5. **Fifteen minutes**, mostly spent waiting on copy-pasting IDs.
+
+**A note if you're on Windows:** this guide only works on Mac and Linux, because
+it schedules jobs using `cron`, which Windows doesn't have built in. Making
+this work on Windows would need a genuinely different scheduling system
+(Task Scheduler), not a small tweak, so it isn't covered here yet. If
+you're on Windows, the easiest path is the same always-on Linux server
+this guide already recommends for keeping jobs running overnight.
 
 ## Step 1: Get the code
 
 Ask your coding agent to clone this repository, or run it yourself:
 
 ```
-git clone https://github.com/earleads/agent-cron-registry.git
+gh repo clone earleads/agent-cron-registry
 cd agent-cron-registry
 ```
+
+(No `gh`? Plain `git clone https://github.com/earleads/agent-cron-registry.git` works too.)
 
 ## Step 2: Create a Notion integration (this gets you an API token)
 

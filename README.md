@@ -39,10 +39,21 @@ workspace and your own machine.
 - A Notion account (free tier is fine) and a Notion integration token.
 - A machine that can run `cron` — any Mac or Linux machine, including a
   cheap always-on server if you want jobs to keep running when your laptop
-  is closed.
+  is closed. (Windows isn't supported yet — see note below.)
 - Claude Code (or another chat-driven coding agent with shell + hooks
   access) if you want the "just ask in chat" experience. The scripts also
   work fine run by hand with no agent at all.
+- [GitHub CLI](https://cli.github.com) (`gh`), installed and logged in.
+  Not required to run the scripts, but it means you never have to type a
+  `git` command yourself — just tell your agent "clone this repo" or "check
+  for updates" and it handles it, with no separate authentication setup.
+
+**Windows note:** this only supports Mac and Linux, because it schedules
+jobs with `cron`, which Windows doesn't have natively. Adding Windows would
+mean a second scheduling path (Task Scheduler), not a copy-paste change, so
+it's left out of this first version rather than half-built. If you're on
+Windows, the cheapest fix is the same always-on Linux server this guide
+already recommends for keeping jobs running when a laptop is closed.
 
 ## Full setup guide
 
@@ -52,7 +63,7 @@ developers: **https://agent-cron-guide-one.vercel.app**
 ## Quick start (if you're comfortable with the terminal)
 
 ```bash
-git clone https://github.com/earleads/agent-cron-registry.git
+gh repo clone earleads/agent-cron-registry   # or: git clone https://github.com/earleads/agent-cron-registry.git
 cd agent-cron-registry
 cp .env.example .env
 # fill in NOTION_API_TOKEN in .env, then:

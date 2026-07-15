@@ -47,7 +47,7 @@ workspace and your own machine.
 ## Full setup guide
 
 Step-by-step, plain English, written for non-developers as much as
-developers: **[link added after the guide page deploys]**
+developers: **https://agent-cron-guide-one.vercel.app**
 
 ## Quick start (if you're comfortable with the terminal)
 

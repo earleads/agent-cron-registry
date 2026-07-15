@@ -37,9 +37,10 @@ workspace and your own machine.
 ## Prerequisites
 
 - A Notion account (free tier is fine) and a Notion integration token.
-- A machine that can run `cron` — any Mac or Linux machine, including a
-  cheap always-on server if you want jobs to keep running when your laptop
-  is closed. (Windows isn't supported yet — see note below.)
+- **An always-on server.** This is required, not optional — this is built to
+  centralize jobs for a whole team, so it needs to run somewhere that stays
+  on, not on any one person's laptop. Any cheap always-on Mac or Linux box
+  works. (Windows isn't supported yet — see note below.)
 - Claude Code (or another chat-driven coding agent with shell + hooks
   access) if you want the "just ask in chat" experience. The scripts also
   work fine run by hand with no agent at all.
@@ -53,7 +54,7 @@ jobs with `cron`, which Windows doesn't have natively. Adding Windows would
 mean a second scheduling path (Task Scheduler), not a copy-paste change, so
 it's left out of this first version rather than half-built. If you're on
 Windows, the cheapest fix is the same always-on Linux server this guide
-already recommends for keeping jobs running when a laptop is closed.
+already requires.
 
 ## Full setup guide
 

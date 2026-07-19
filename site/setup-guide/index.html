@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Cron Registry: Setup Guide</title>
+<meta name="description" content="Ask your AI coding agent to schedule something and it just happens, logged in one shared table, running as a real job. Plain English setup guide.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fffefc;
+    --ink: #0d0d0d;
+    --muted: #545454;
+    --gold: #785926;
+    --gold-bg: #fff1c6;
+    --line: #ece7db;
+    --card: #f8f8f4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .brand img { width: 26px; height: 26px; border-radius: 6px; }
+  .btn {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.82; }
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  main { padding: 56px 0 80px; }
+  .eyebrow {
+    display: inline-block;
+    background: var(--gold-bg);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin: 0 0 18px;
+  }
+  .lede {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 0 32px;
+  }
+  .cta-row { display: flex; gap: 12px; margin-bottom: 56px; flex-wrap: wrap; }
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 56px 0 16px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  p { font-size: 16px; color: #2a2a2a; }
+  .prereq {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 20px 0 40px;
+  }
+  .prereq h3 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--gold);
+  }
+  .prereq ul { margin: 0; padding-left: 20px; }
+  .prereq li { margin-bottom: 10px; font-size: 15px; }
+  .howto {
+    background: var(--gold-bg);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 0 0 44px;
+  }
+  .howto h3 { margin: 0 0 8px; font-size: 16px; font-weight: 700; }
+  .howto p { margin: 0; font-size: 15px; color: #3a3320; }
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 32px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .step-body { flex: 1; min-width: 0; }
+  .step-body h3 { margin: 4px 0 8px; font-size: 17px; font-weight: 700; }
+  .step-body p { margin: 0 0 10px; }
+  .youdo {
+    display: inline-block;
+    background: #efe7d3;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin: 0 0 10px;
+  }
+  .say {
+    position: relative;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px 14px 46px;
+    margin: 6px 0 4px;
+  }
+  .say::before {
+    content: "\1F4AC";
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    font-size: 17px;
+  }
+  .say .lbl {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .say .quote {
+    font-size: 15.5px;
+    color: var(--ink);
+    font-style: italic;
+  }
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13.5px;
+  }
+  code {
+    background: var(--card);
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+  pre {
+    background: #14120e;
+    color: #f4f0e6;
+    padding: 16px 18px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 8px 0 0;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  details.fallback {
+    margin: 8px 0 0;
+  }
+  details.fallback summary {
+    cursor: pointer;
+    font-size: 13px;
+    color: #8a8a8a;
+    font-weight: 600;
+    list-style: none;
+  }
+  details.fallback summary::-webkit-details-marker { display: none; }
+  details.fallback summary::before { content: "\203A  "; }
+  details.fallback[open] summary::before { content: "\2039  "; }
+  .callout {
+    border-left: 3px solid var(--gold);
+    background: var(--gold-bg);
+    padding: 14px 18px;
+    border-radius: 0 10px 10px 0;
+    font-size: 14.5px;
+    margin: 16px 0 40px;
+  }
+  .note-list li { margin-bottom: 8px; font-size: 15px; }
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0 60px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  footer a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="/favicon.png" alt="">
+      Agent Cron Registry
+    </div>
+    <a class="btn btn-outline" href="https://github.com/earleads/agent-cron-registry">View on GitHub</a>
+  </header>
+
+  <main>
+    <span class="eyebrow">Setup guide</span>
+    <h1>Ask your agent to schedule it. It shows up in one place.</h1>
+    <p class="lede">A shared Notion table plus one script your AI coding agent calls, so every scheduled job across your team lands in the same place and actually runs, instead of scattered across five different tools.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://github.com/earleads/agent-cron-registry">Get the code</a>
+      <a class="btn btn-outline" href="#setup">Jump to setup</a>
+    </div>
+
+    <h2>What this solves</h2>
+    <p>Most teams end up with scheduled jobs scattered across whatever tool was closest at the time: one report lives in one automation platform, one check is a chat routine, one script is a cron job on someone's laptop nobody else knows exists. This gives every job one home: ask your agent for it in plain English, and it registers the job to a table everyone can see while installing the real job on the machine you asked it to run on.</p>
+
+    <div class="prereq" id="before-you-start">
+      <h3>Before you start</h3>
+      <ul>
+        <li><strong>A Notion account.</strong> Free tier is fine. Everything else depends on this.</li>
+        <li><strong>An always-on server.</strong> This is required, not optional. The whole point of this setup is that jobs keep running and stay visible to your whole team whether or not anyone's laptop is open. It doesn't need to be powerful or expensive, just always on. Mac or Linux only for now, see the Windows note below.<br><a href="https://agent-cron-server-guide.vercel.app" style="font-weight:600;">Don't have one? Here's the 10 minute walkthrough to get one, from a few euros a month.</a></li>
+        <li><strong>A chat-based coding agent</strong> like Claude Code. This is what makes the plain-English flow below work. Every script also runs fine by hand if you'd rather, so an agent isn't strictly required, but this guide is written assuming you have one.</li>
+        <li><strong>GitHub CLI</strong> (<code>gh</code>), installed and logged in. This is the piece that lets you skip typing commands: with it in place, you just tell your agent "clone the repo" or "check for updates" and it handles the rest, no separate login step. Install it once from <a href="https://cli.github.com">cli.github.com</a>.</li>
+        <li><strong>About fifteen minutes</strong>, most of it spent inside Notion setting up an account connection.</li>
+      </ul>
+      <p style="margin-top:14px;font-size:14px;color:#666;"><strong>On Windows?</strong> This version schedules jobs with <code>cron</code>, which Windows doesn't have built in, so it only runs on Mac and Linux today. The simplest fix is the same always-on Linux server already required above, which also solves "keeps running when my laptop's closed" at the same time.</p>
+    </div>
+
+    <div class="howto">
+      <h3>How to use this guide</h3>
+      <p>Because you've got a coding agent and GitHub CLI set up, almost none of this needs the terminal. Each step below shows the exact words to say to your agent, in plain English. Two steps happen inside Notion's website and only you can do those (your agent can't log into your Notion for you), so they're clearly marked. Prefer running things yourself? The raw command is tucked under a "run it yourself" toggle on every step that has one.</p>
+    </div>
+
+    <h2 id="setup">Setup, step by step</h2>
+
+    <div class="callout">
+      <strong>No always-on server yet?</strong> Do that first, everything below assumes you have one. It takes about ten minutes and costs a few euros a month: <a href="https://agent-cron-server-guide.vercel.app">follow the server walkthrough</a>, then come back here.
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Get the code</h3>
+        <p>Bring the project onto the machine you'll be scheduling jobs on.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Clone the agent-cron-registry repo from the earleads GitHub and open it up."</span>
+        </div>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <pre><code>gh repo clone earleads/agent-cron-registry
+cd agent-cron-registry</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Create a Notion integration</h3>
+        <span class="youdo">You do this one</span>
+        <p>This gets you the token that lets the tool write to your Notion. It happens inside Notion's website, so your agent can't do it for you.</p>
+        <ol>
+          <li>Go to <code>notion.so/my-integrations</code>, logged into the Notion account you want to use.</li>
+          <li>Click "New integration" and give it any name, for example "Cron Registry".</li>
+          <li>Copy the "Internal Integration Token" it shows you. It's a long string starting with <code>secret_</code> or <code>ntn_</code>. Treat it like a password and keep it handy for step 4.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Connect the integration to a page</h3>
+        <span class="youdo">You do this one</span>
+        <p>This tells Notion which page the new table is allowed to live under. Also inside Notion's website, so it's on you.</p>
+        <ol>
+          <li>Open or create any page you're happy to have a new table live under.</li>
+          <li>Click the "..." menu in the top right, choose "Connections", and pick the integration you just made.</li>
+          <li>Copy that page's ID: it's the long string of letters and numbers at the end of the page's web address. You'll hand this to your agent in step 5.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Hand over your token</h3>
+        <p>Give your agent the token from step 2 so the tool can talk to Notion.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Set up the environment file for this project and save my Notion token in it: [paste the token from step 2]."</span>
+        </div>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <pre><code>cp .env.example .env
+# then open .env and paste your token in as:
+# NOTION_API_TOKEN=your_token_from_step_2
+# leave NOTION_REGISTRY_DB_ID blank for now</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Create the shared table</h3>
+        <p>Now your agent builds the "Scheduled Jobs" table in Notion and wires the last ID back in for you, so there's nothing left to copy-paste.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Use this Notion page ID to create the Scheduled Jobs table, then save the database ID it gives back into my environment file: [paste the page ID from step 3]."</span>
+        </div>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <pre><code>./scripts/setup-notion-db.sh &lt;page-id-from-step-3&gt;
+# it prints a database ID, paste that into .env as:
+# NOTION_REGISTRY_DB_ID=the_printed_id</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h3>Try it</h3>
+        <p>Schedule a throwaway job to prove the whole thing works end to end.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Schedule a test job that writes the word hello to a file every five minutes, so we can check this works."</span>
+        </div>
+        <p style="margin-top:12px;">Then check two things: a new row should appear in your Notion table right away, and after five minutes the hello file should have a line in it. Both happening means everything is wired up. Once you've confirmed it, clean up:</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Great, remove that test job, both the schedule and the Notion row."</span>
+        </div>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <pre><code>./scripts/register-job.sh "Say hello" "*/5 * * * *" "Every 5 minutes" "echo hello >> /tmp/hello.log"
+# to remove it afterwards:
+crontab -l | grep -v 'Say hello' | crontab -
+# then delete or pause the row in Notion</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <h3>Let your agent handle scheduling from now on (optional)</h3>
+        <p>Install the little skill that teaches your agent this whole flow, so from here on you just ask for jobs in plain English and it does the rest.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Install the schedule-job skill from this repo into my project so I can just ask you to schedule things."</span>
+        </div>
+        <p style="margin-top:12px;">After that, requests like "schedule my morning report every weekday at 8am" just work: your agent figures out the timing and the command and registers the job itself.</p>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <pre><code>cp -r claude-skill/schedule-job /path/to/your/project/.claude/skills/schedule-job</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <h3>Add the guardrail (optional but recommended)</h3>
+        <p>This stops your agent from quietly installing a job that skips the registry, which matters once more than one person is asking it to schedule things.</p>
+        <div class="say">
+          <span class="lbl">Say to your agent</span>
+          <span class="quote">"Add the guardrail hook from this repo that blocks any cron job which skips the registry, and wire it into my project's settings."</span>
+        </div>
+        <details class="fallback">
+          <summary>Run it yourself</summary>
+          <p style="margin-top:8px;font-size:14px;color:#555;">The exact <code>.claude/settings.json</code> snippet is in <a href="https://github.com/earleads/agent-cron-registry/blob/main/docs/SETUP_GUIDE.md">docs/SETUP_GUIDE.md</a> in the repo.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="callout">
+      Want the raw copy-paste commands for every step in one place, plus troubleshooting for common errors? They live in <a href="https://github.com/earleads/agent-cron-registry/blob/main/docs/SETUP_GUIDE.md">docs/SETUP_GUIDE.md</a> in the repo.
+    </div>
+
+    <h2>What this doesn't do yet</h2>
+    <ul class="note-list">
+      <li>No web dashboard, the Notion table is the only view.</li>
+      <li>No one-click removal yet. To take a job out you (or your agent, if you ask it) edit the crontab and the Notion row.</li>
+      <li>Only tested against standard cron. Works the same with launchd or GitHub Actions instead, you'd just install the job a different way in step 6.</li>
+    </ul>
+  </main>
+
+  <footer>
+    Built by <a href="https://github.com/earleads">David Small</a>. MIT licensed, use it, fork it, adapt it for your own team.
+    &nbsp;&middot;&nbsp; <a href="https://github.com/earleads/agent-cron-registry">Source on GitHub</a>
+  </footer>
+</div>
+</body>
+</html>

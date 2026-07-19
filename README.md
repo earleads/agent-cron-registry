@@ -41,6 +41,8 @@ workspace and your own machine.
   centralize jobs for a whole team, so it needs to run somewhere that stays
   on, not on any one person's laptop. Any cheap always-on Mac or Linux box
   works. (Windows isn't supported yet — see note below.)
+  Don't have one? Here's a 10 minute walkthrough to set one up from a few
+  euros a month: **https://agent-cron-server-guide.vercel.app**
 - Claude Code (or another chat-driven coding agent with shell + hooks
   access) if you want the "just ask in chat" experience. The scripts also
   work fine run by hand with no agent at all.
@@ -60,6 +62,15 @@ already requires.
 
 Step-by-step, plain English, written for non-developers as much as
 developers: **https://agent-cron-guide-one.vercel.app**
+
+Every step shows the exact words to say to your coding agent, with the raw
+terminal command tucked underneath if you'd rather run it yourself.
+
+## Server setup guide
+
+Need the always-on server first? This companion walkthrough gets you one in
+about ten minutes, from a few euros a month, locked down properly:
+**https://agent-cron-server-guide.vercel.app**
 
 ## Quick start (if you're comfortable with the terminal)
 
